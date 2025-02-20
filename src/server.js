@@ -25,7 +25,7 @@ app.get("/integration.json", (req, res) => {
       "descriptions": {
         "app_name": "discord-events-notification",
         "app_description": "Sends Discord channel messages to Telex at regular intervals for monitoring and logging.\n",
-        "app_logo": "https://discord-telex-event-integrations-production.up.railway.app",
+        "app_logo": "https://trybex.com.ng/assets/images/Component%203.png",
         "app_url": "https://discord-telex-event-integrations-production.up.railway.app",
         "background_color": "#fff"
       },
