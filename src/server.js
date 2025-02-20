@@ -25,8 +25,8 @@ app.get("/integration.json", (req, res) => {
       "descriptions": {
         "app_name": "discord-events-notification",
         "app_description": "Sends Discord channel messages to Telex at regular intervals for monitoring and logging.\n",
-        "app_logo": "https://ec2-3-84-199-152.compute-1.amazonaws.com",
-        "app_url": "https://ec2-3-84-199-152.compute-1.amazonaws.com",
+        "app_logo": "https://discord-telex-event-integrations-production.up.railway.app",
+        "app_url": "https://discord-telex-event-integrations-production.up.railway.app",
         "background_color": "#fff"
       },
       "is_active": true,
@@ -37,8 +37,8 @@ app.get("/integration.json", (req, res) => {
         "Event Monitoring",
         "Automation"
       ],
-      "author": "xclusive",
-      "integration_category": "Communication and Collaboration",
+      "author": "xclusive", 
+      "integration_category": "Communication & Collaboration",
       "settings": [
         {
           "label": "Time Interval",
@@ -83,7 +83,7 @@ app.get("/integration.json", (req, res) => {
         }
       ],
       "target_url": " https://discord.com/api/webhooks/1341793920920719381/9J_sN5LTn_W5tI_2AfVDc_XV0RDZT6nDAr2JSX_Q7bX6FaGzFjwmxC0w874vnPqlRDy2",
-      "tick_url": "https://ec2-3-84-199-152.compute-1.amazonaws.com/telex-webhook"
+      "tick_url": "https://discord-telex-event-integrations-production.up.railway.app/telex-webhook"
     }
   };
   res.json(integrationJson);
