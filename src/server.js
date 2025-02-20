@@ -1,9 +1,11 @@
 import express, { json } from "express";
+import cors from "cors";
 import { fetchMessages as fetchDiscordMessages } from "./discord.js";
 import { sendToTelex } from "./telex.js";
 import { port } from "./config.js";
 
 const app = express();
+app.use(cors()); // Enable CORS
 app.use(json());
 
 app.post("/telex-webhook", async (req, res) => {
