@@ -1,25 +1,18 @@
-import { get } from "axios";
+import axios from "axios";
+import { telexWebhook } from "./config.js";
 
-const DISCORD_API_URL = `https://discord.com/api/v10/channels/${process.env.DISCORD_CHANNEL_ID}/messages`;
-
-async function fetchMessages() {
-  try {
-    const response = await get(DISCORD_API_URL, {
-      headers: { Authorization: `Bot ${process.env.DISCORD_TOKEN}` },
-    });
-
-    const messages = response.data.filter((msg) => !msg.author.bot); // Ignore bot messages
-
-    console.log(`Fetched ${messages.length} messages.`);
-    return messages.map((msg) => ({
-      username: msg.author.username,
-      content: msg.content,
-      timestamp: msg.timestamp,
-    }));
-  } catch (error) {
-    console.error("Error fetching messages:", error.response?.data || error.message);
-    return [];
+const sendToTelex = async (messages) => {
+  if (!messages.length) {
+    console.log("⚠️ No new messages to send.");
+    return;
   }
-}
 
-export default { fetchMessages };
+  try {
+    const response = await axios.post(telexWebhook, { messages });
+    console.log(`✅ Messages sent to Telex! Response: ${response.status}`);
+  } catch (error) {
+    console.error("❌ Error sending messages to Telex:", error.response?.data || error.message);
+  }
+};
+
+export { sendToTelex };

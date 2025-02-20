@@ -1,11 +1,12 @@
-const axios = require("axios");
+import axios from "axios";
+import { discordToken, discordChannelId } from "./config.js";
 
-const DISCORD_API_URL = `https://discord.com/api/v10/channels/${process.env.DISCORD_CHANNEL_ID}/messages`;
+const DISCORD_API_URL = `https://discord.com/api/v10/channels/${discordChannelId}/messages`;
 
 async function fetchMessages() {
   try {
     const response = await axios.get(DISCORD_API_URL, {
-      headers: { Authorization: `Bot ${process.env.DISCORD_TOKEN}` },
+      headers: { Authorization: `Bot ${discordToken}` },
     });
 
     const messages = response.data.filter((msg) => !msg.author.bot); // Ignore bot messages
@@ -17,9 +18,9 @@ async function fetchMessages() {
       timestamp: msg.timestamp,
     }));
   } catch (error) {
-    console.error("Error fetching messages:", error.response?.data || error.message);
+    console.error("❌ Error fetching messages from Discord:", error.response?.data || error.message);
     return [];
   }
 }
 
-module.exports = { fetchMessages };
+export { fetchMessages };

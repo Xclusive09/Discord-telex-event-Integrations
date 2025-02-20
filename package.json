@@ -1,18 +1,31 @@
 {
   "name": "discord-telex-integration",
   "version": "1.0.0",
-  "main": "index.js",
+  "description": "Fetches Discord messages and sends them to Telex at intervals for monitoring and logging.",
+  "main": "src/index.js",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js",
+    "test": "node test/index.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
+  "keywords": [
+    "discord",
+    "telex",
+    "integration",
+    "webhook",
+    "monitoring"
+  ],
+  "author": "Xclusive",
+  "license": "MIT",
   "dependencies": {
     "axios": "^1.7.9",
     "discord.js": "^14.18.0",
     "dotenv": "^16.4.7",
+    "express": "^4.21.2",
     "node-fetch": "^3.3.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.0"
   }
 }
