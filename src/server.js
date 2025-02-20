@@ -38,6 +38,7 @@ app.get("/integration.json", (req, res) => {
         "Automation"
       ],
       "author": "xclusive",
+      "integration_category": "Communication and Collaboration",
       "settings": [
         {
           "label": "Time Interval",
