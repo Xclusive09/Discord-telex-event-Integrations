@@ -7,21 +7,30 @@ const sendToTelex = async (messages) => {
     return;
   }
 
-  // Format messages into a string for better readability
-  const formattedMessages = messages.map(msg => `${msg.username}: ${msg.content}`).join("\n");
+  // Group messages by username
+  const groupedMessages = messages.reduce((acc, msg) => {
+    if (!acc[msg.username]) acc[msg.username] = [];
+    acc[msg.username].push(`- ${msg.content}`);
+    return acc;
+  }, {});
 
-  // Take the latest message's details dynamically
+  // Format messages with each user’s messages appearing under their name
+  const formattedMessages = Object.entries(groupedMessages)
+    .map(([username, msgs]) => `${username}:\n${msgs.join("\n")}`)
+    .join("\n\n");
+
+  // Take the last message details dynamically
   const lastMessage = messages[messages.length - 1];
 
   const payload = {
-    event_name: "Discord Message", // Generic event name
-    message: formattedMessages, // All messages formatted
+    event_name: "Discord Messages",
+    message: formattedMessages,
     status: "success",
-    username: lastMessage.username, // Use the last sender’s username
-    timestamp: lastMessage.timestamp // Add timestamp from Discord
+    username: lastMessage.username,
+    timestamp: lastMessage.timestamp,
   };
 
-  console.log("🚀 Sending payload to Telex:", JSON.stringify(payload, null, 2));
+  console.log("🚀 Sending payload to Telex:\n", JSON.stringify(payload, null, 2));
 
   try {
     const response = await axios.post(telexWebhook, payload, {
