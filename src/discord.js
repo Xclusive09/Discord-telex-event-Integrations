@@ -1,5 +1,4 @@
 import { Client, GatewayIntentBits } from "discord.js";
-import { sendToTelex } from "./telex.js";
 import { discordToken, discordChannelId } from "./config.js";
 
 const client = new Client({
@@ -28,8 +27,8 @@ client.on("messageCreate", (message) => {
   });
 });
 
-// Function to send messages every 5 minutes
-const sendMessagesEvery5Minutes = () => {
+// Function to fetch messages from the buffer
+const fetchMessages = async () => {
   const now = new Date();
   const fiveMinutesAgo = new Date(now - 5 * 60 * 1000); // 5 minutes ago
 
@@ -38,19 +37,12 @@ const sendMessagesEvery5Minutes = () => {
     (msg) => msg.timestamp >= fiveMinutesAgo
   );
 
-  if (recentMessages.length > 0) {
-    console.log(`📤 Sending ${recentMessages.length} messages to Telex...`);
-    sendToTelex(recentMessages);
-  } else {
-    console.log("⏳ No new messages in the last 5 minutes.");
-  }
-
   // Remove old messages from the buffer
   messagesBuffer = messagesBuffer.filter((msg) => msg.timestamp >= fiveMinutesAgo);
+
+  return recentMessages;
 };
 
-// Run the function every 5 minutes
-setInterval(sendMessagesEvery5Minutes, 2 * 60 * 1000);
-
 client.login(discordToken);
-export {fetchMessages};
+
+export { fetchMessages };
