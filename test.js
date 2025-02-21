@@ -1,4 +1,4 @@
-import { fetchMessages } from "./src//discord.js";
+import { fetchMessages } from "./src/discord.js";
 import { sendToTelex } from "./src/telex.js";
 
 async function testIntegration() {
