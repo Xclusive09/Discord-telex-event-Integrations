@@ -1,26 +1,42 @@
-import axios from "axios";
+import { Client, GatewayIntentBits } from "discord.js";
+import { sendToTelex } from "./telex.js";
 import { discordToken, discordChannelId } from "./config.js";
 
-const DISCORD_API_URL = `https://discord.com/api/v10/channels/${discordChannelId}/messages`;
+// Create a new Discord client with necessary intents
+const client = new Client({
+  intents: [
+    GatewayIntentBits.Guilds, // Required to interact with servers
+    GatewayIntentBits.GuildMessages, // Required to receive messages
+    GatewayIntentBits.MessageContent, // Required to access message content
+  ],
+});
 
-async function fetchMessages() {
-  try {
-    const response = await axios.get(DISCORD_API_URL, {
-      headers: { Authorization: `Bot ${discordToken}` },
-    });
+// When the bot is ready
+client.once("ready", () => {
+  console.log(`✅ Logged in as ${client.user.tag} and listening for messages...`);
+});
 
-    const messages = response.data.filter((msg) => !msg.author.bot); // Ignore bot messages
+// Listen for new messages in Discord
+client.on("messageCreate", async (message) => {
+  // Ignore bot messages
+  if (message.author.bot) return;
 
-    console.log(`Fetched ${messages.length} messages.`);
-    return messages.map((msg) => ({
-      username: msg.author.username,
-      content: msg.content,
-      timestamp: msg.timestamp,
-    }));
-  } catch (error) {
-    console.error("❌ Error fetching messages from Discord:", error.response?.data || error.message);
-    return [];
+  console.log(`📩 New message in #${message.channel.name}: ${message.content}`);
+
+  // Check if the message is from the target channel
+  if (message.channelId === discordChannelId) {
+    const formattedMessage = [
+      {
+        username: message.author.username,
+        content: message.content,
+        timestamp: message.createdAt.toISOString(),
+      },
+    ];
+
+    // Send the message immediately to Telex
+    await sendToTelex(formattedMessage);
   }
-}
+});
 
-export { fetchMessages };
+// Log in to Discord
+client.login(discordToken);
