@@ -2,41 +2,54 @@ import { Client, GatewayIntentBits } from "discord.js";
 import { sendToTelex } from "./telex.js";
 import { discordToken, discordChannelId } from "./config.js";
 
-// Create a new Discord client with necessary intents
 const client = new Client({
   intents: [
-    GatewayIntentBits.Guilds, // Required to interact with servers
-    GatewayIntentBits.GuildMessages, // Required to receive messages
-    GatewayIntentBits.MessageContent, // Required to access message content
+    GatewayIntentBits.Guilds,
+    GatewayIntentBits.GuildMessages,
+    GatewayIntentBits.MessageContent,
   ],
 });
 
-// When the bot is ready
+let messagesBuffer = []; // Store messages temporarily
+
 client.once("ready", () => {
-  console.log(`✅ Logged in as ${client.user.tag} and listening for messages...`);
+  console.log(`✅ Logged in as ${client.user.tag}, collecting messages...`);
 });
 
-// Listen for new messages in Discord
-client.on("messageCreate", async (message) => {
-  // Ignore bot messages
-  if (message.author.bot) return;
+// Listen for new messages
+client.on("messageCreate", (message) => {
+  if (message.author.bot) return; // Ignore bot messages
+  if (message.channelId !== discordChannelId) return; // Only track messages from the target channel
 
-  console.log(`📩 New message in #${message.channel.name}: ${message.content}`);
+  messagesBuffer.push({
+    username: message.author.username,
+    content: message.content,
+    timestamp: new Date(message.createdTimestamp), // Convert timestamp to Date object
+  });
+});
 
-  // Check if the message is from the target channel
-  if (message.channelId === discordChannelId) {
-    const formattedMessage = [
-      {
-        username: message.author.username,
-        content: message.content,
-        timestamp: message.createdAt.toISOString(),
-      },
-    ];
+// Function to send messages every 5 minutes
+const sendMessagesEvery5Minutes = () => {
+  const now = new Date();
+  const fiveMinutesAgo = new Date(now - 5 * 60 * 1000); // 5 minutes ago
 
-    // Send the message immediately to Telex
-    await sendToTelex(formattedMessage);
+  // Get messages from the last 5 minutes
+  const recentMessages = messagesBuffer.filter(
+    (msg) => msg.timestamp >= fiveMinutesAgo
+  );
+
+  if (recentMessages.length > 0) {
+    console.log(`📤 Sending ${recentMessages.length} messages to Telex...`);
+    sendToTelex(recentMessages);
+  } else {
+    console.log("⏳ No new messages in the last 5 minutes.");
   }
-});
 
-// Log in to Discord
+  // Remove old messages from the buffer
+  messagesBuffer = messagesBuffer.filter((msg) => msg.timestamp >= fiveMinutesAgo);
+};
+
+// Run the function every 5 minutes
+setInterval(sendMessagesEvery5Minutes, 2 * 60 * 1000);
+
 client.login(discordToken);
