@@ -53,3 +53,4 @@ const sendMessagesEvery5Minutes = () => {
 setInterval(sendMessagesEvery5Minutes, 2 * 60 * 1000);
 
 client.login(discordToken);
+export {fetchMessages};
