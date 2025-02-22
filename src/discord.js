@@ -39,7 +39,7 @@ const fetchMessages = async () => {
   );
 
   // Remove old messages from the buffer
-  messagesBuffer = messagesBuffer.filter((msg) => msg.timestamp >= fiveMinutesAgo);
+messagesBuffer = [];
 
   console.log(`Fetched ${recentMessages.length} messages from the buffer.`);
   return recentMessages;
