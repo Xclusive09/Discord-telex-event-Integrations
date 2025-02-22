@@ -14,7 +14,7 @@ const sendToTelex = async (messages) => {
 
   const payload = {
     event_name: "Discord Messages",
-    messages: formattedMessages, // ✅ Sending all messages as a single string
+    full_message_log: formattedMessages, // ✅ Sending all messages as a single string
     status: "success",
     timestamp: new Date().toISOString(), // Current timestamp
   };
