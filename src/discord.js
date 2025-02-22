@@ -42,6 +42,7 @@ const fetchMessages = async () => {
 
   return recentMessages;
 };
+console.log("DISCORD_TOKEN:", process.env.DISCORD_TOKEN ? "Token exists" : "Token is missing");
 
 client.login(discordToken);
 
