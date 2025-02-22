@@ -17,7 +17,6 @@ const sendToTelex = async (messages) => {
     messages: formattedMessages,
     username: "Discord Bot",  // ✅ Send all messages as a single formatted string
     status: "success",
-    timestamp: new Date().toISOString(),
   };
 
   console.log("🚀 Sending payload to Telex as an object:\n", JSON.stringify(payload, null, 2));
