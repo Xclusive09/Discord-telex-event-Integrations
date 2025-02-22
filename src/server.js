@@ -28,7 +28,7 @@ app.get("/integration.json", (req, res) => {
         "app_name": "discord-events-notification",
         "app_description": "Sends Discord channel messages to Telex at regular intervals for monitoring and logging.\n",
         "app_logo": "https://trybex.com.ng/assets/images/Component%203.png",
-        "app_url": "https://discord-telex-event-integrations-production.up.railway.app",
+        "app_url": "https://discord-telex-event-integrations.onrender.com",
         "background_color": "#fff"
       },
       "is_active": true,
@@ -85,7 +85,7 @@ app.get("/integration.json", (req, res) => {
         }
       ],
       "target_url": " https://discord.com/api/webhooks/1341793920920719381/9J_sN5LTn_W5tI_2AfVDc_XV0RDZT6nDAr2JSX_Q7bX6FaGzFjwmxC0w874vnPqlRDy2",
-      "tick_url": "https://discord-telex-event-integrations-production.up.railway.app/telex-webhook"
+      "tick_url": "https://discord-telex-event-integrations.onrender.com/telex-webhook"
     }
   };
   res.json(integrationJson);
