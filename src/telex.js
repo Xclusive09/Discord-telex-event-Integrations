@@ -7,16 +7,16 @@ const sendToTelex = async (messages) => {
     return;
   }
 
-  // Combine all messages into a single formatted string
-  const formattedMessages = messages
-    .map((msg) => `${msg.username}: ${msg.content}`) // Format each message
-    .join("\n"); // Join them with a newline
+  // Convert messages to an array of strings
+  const formattedMessages = messages.map(
+    (msg) => `${msg.username}: ${msg.content}`
+  );
 
   const payload = {
     event_name: "Discord Messages",
-    full_message_log: formattedMessages, // ✅ Sending all messages as a single string
+    messages: formattedMessages, // ✅ Send as an array inside an object
     status: "success",
-    timestamp: new Date().toISOString(), // Current timestamp
+    timestamp: new Date().toISOString(),
   };
 
   console.log("🚀 Sending payload to Telex:\n", JSON.stringify(payload, null, 2));
