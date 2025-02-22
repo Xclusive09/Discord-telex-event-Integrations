@@ -20,6 +20,7 @@ client.on("messageCreate", (message) => {
   if (message.author.bot) return; // Ignore bot messages
   if (message.channelId !== discordChannelId) return; // Only track messages from the target channel
 
+  console.log(`📩 New message from ${message.author.username}: ${message.content}`);
   messagesBuffer.push({
     username: message.author.username,
     content: message.content,
@@ -40,9 +41,9 @@ const fetchMessages = async () => {
   // Remove old messages from the buffer
   messagesBuffer = messagesBuffer.filter((msg) => msg.timestamp >= fiveMinutesAgo);
 
+  console.log(`Fetched ${recentMessages.length} messages from the buffer.`);
   return recentMessages;
 };
-console.log("DISCORD_TOKEN:", process.env.DISCORD_TOKEN ? "Token exists" : "Token is missing");
 
 client.login(discordToken);
 
