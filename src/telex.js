@@ -7,19 +7,18 @@ const sendToTelex = async (messages) => {
     return;
   }
 
-  // Take the last message details dynamically
-  const lastMessage = messages;
-  // [messages.length - 1]
-  // Format payload as a single object instead of an array
+  // Convert messages to a formatted string
+  const formattedMessages = messages
+    .map((msg) => `${msg.username}: ${msg.content}`)
+    .join("\n"); // Join messages into a single string with line breaks
 
   const payload = {
     event_name: "Discord Messages",
-    message: lastMessage.content,  // ✅ Send only the message string
+    messages: formattedMessages,
+    username: "Discord Bot",  // ✅ Send all messages as a single formatted string
     status: "success",
-    username: lastMessage.username,
-    timestamp: lastMessage.timestamp,
+    timestamp: new Date().toISOString(),
   };
-  
 
   console.log("🚀 Sending payload to Telex as an object:\n", JSON.stringify(payload, null, 2));
 
@@ -27,9 +26,9 @@ const sendToTelex = async (messages) => {
     const response = await axios.post(telexWebhook, payload, {
       headers: { "Content-Type": "application/json" },
     });
-    console.log(`✅ Message sent to Telex! Response: ${response.status}`);
+    console.log(`✅ Messages sent to Telex! Response: ${response.status}`);
   } catch (error) {
-    console.error("❌ Error sending message to Telex:", error.response?.data || error.message);
+    console.error("❌ Error sending messages to Telex:", error.response?.data || error.message);
   }
 };
 
