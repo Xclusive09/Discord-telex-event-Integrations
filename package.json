@@ -5,8 +5,8 @@
   "main": "src/index.js",
   "type": "module",
   "scripts": {
-    "start": "node src/index.js",
-    "dev": "nodemon src/index.js",
+    "start": "node --experimental-vm-modules src/index.js",
+    "dev": "nodemon --experimental-vm-modules src/index.js",
     "test": "node test/index.js"
   },
   "keywords": [
@@ -18,13 +18,15 @@
   ],
   "author": "Xclusive",
   "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "dependencies": {
     "axios": "^1.7.9",
     "cors": "^2.8.5",
     "discord.js": "^14.18.0",
     "dotenv": "^16.4.7",
-    "express": "^4.21.2",
-    "node-fetch": "^3.3.2"
+    "express": "^4.21.2"
   },
   "devDependencies": {
     "nodemon": "^3.0.0"
